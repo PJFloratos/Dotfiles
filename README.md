@@ -5,7 +5,6 @@ A stealthy, terminal-centric i3wm setup built for speed, minimal distractions, a
 Designed on a Debian-based system, this "Lethal Mint" rice balances a dark, low-contrast UI with sharp, intentional highlights. The active window focus and file manager selections use a muted Steel Gray, leaving the vibrant Mint Green strictly for critical text, metrics, and progress bars.
 
 ![Screenshot](assets/preview.png)
-*Add a screenshot of your desktop here!*
 
 ## ⚙️ The Stack
 

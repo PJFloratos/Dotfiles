@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# 1. Volume Change Step
+STEP="5%"
+
+# 2. Execute the change
+case $1 in
+    up)
+        pactl set-sink-volume @DEFAULT_SINK@ +$STEP
+        pactl set-sink-mute @DEFAULT_SINK@ 0
+        ;;
+    down)
+        pactl set-sink-volume @DEFAULT_SINK@ -$STEP
+        pactl set-sink-mute @DEFAULT_SINK@ 0
+        ;;
+    mute)
+        pactl set-sink-mute @DEFAULT_SINK@ toggle
+        ;;
+esac
+
+# 3. Get current stats
+VOLUME=$(pactl get-sink-volume @DEFAULT_SINK@ | grep -Po '[0-9]+(?=%)' | head -1)
+IS_MUTED=$(pactl get-sink-mute @DEFAULT_SINK@ | grep -o "yes")
+
+# 4. Send to Dunst
+# -h string:x-dunst-stack-tag:volume ensures it updates the SAME notification instead of spamming
+if [ "$IS_MUTED" = "yes" ]; then
+    notify-send -u low -t 1500 -h string:x-dunst-stack-tag:volume -i audio-volume-muted "Volume" "Muted"
+else
+    notify-send -u low -t 1500 -h string:x-dunst-stack-tag:volume -h int:value:"$VOLUME" "Volume" "Currently at ${VOLUME}%"
+fi

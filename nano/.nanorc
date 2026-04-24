@@ -1,0 +1,20 @@
+# --- Essentials ---
+set mouse            # Enable scrolling/clicking
+set linenumbers      # You liked these!
+set softwrap         # Don't cut off long lines
+set autoindent       # Smart indentation
+set tabsize 4        # Standard tab width
+set atblanks         # Wrap at spaces, not middle of words
+set indicator        # Show a scrollbar on the right
+
+# --- UI Colors (Mint Aesthetic) ---
+# --- UI Colors (Mint Aesthetic) ---
+set titlecolor bold,green,normal   # Mint text, transparent background
+set statuscolor bold,black,green   # Kept solid green for contrast at the bottom (optional!)
+set numbercolor cyan               # Line numbers color
+set keycolor bold,cyan             # The Ctrl+X shortcuts at bottom
+set functioncolor green            # The names of the functions
+
+# --- Syntax Highlighting ---
+# This is the "magic" line that adds colors to your code/configs
+include "/usr/share/nano/*.nanorc"

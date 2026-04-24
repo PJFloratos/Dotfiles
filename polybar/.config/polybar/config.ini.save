@@ -1,0 +1,323 @@
+;==========================================================
+;
+;
+;   ██████╗  ██████╗ ██╗  ██╗   ██╗██████╗  █████╗ ██████╗
+;   ██╔══██╗██╔═══██╗██║  ╚██╗ ██╔╝██╔══██╗██╔══██╗██╔══██╗
+;   ██████╔╝██║   ██║██║   ╚████╔╝ ██████╔╝███████║██████╔╝
+;   ██╔═══╝ ██║   ██║██║    ╚██╔╝  ██╔══██╗██╔══██║██╔══██╗
+;   ██║     ╚██████╔╝███████╗██║   ██████╔╝██║  ██║██║  ██║
+;   ╚═╝      ╚═════╝ ╚══════╝╚═╝   ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝
+;
+;
+;   To learn more about how to configure Polybar
+;   go to https://github.com/polybar/polybar
+;
+;   The README contains a lot of information
+;
+;==========================================================
+
+[colors]
+# CC is the transparency (80%). This makes it "Glass" but not "Invisible"
+background = #CC101213
+background-alt = #101213
+foreground = #e3eaf2
+primary = #2fdf75
+secondary = #7aa2f7
+alert = #f7768e
+disabled = #585b70
+
+
+[bar/example]
+monitor = ${env:MONITOR:}
+bottom = true
+width = 100%
+height = 25pt
+radius = 10
+
+background = ${colors.background}
+foreground = ${colors.foreground}
+
+line-size = 2pt
+padding-left = 1
+padding-right = 1
+module-margin = 1
+
+# Using your Meslo Nerd Font
+font-0 = "MesloLGS NF:style=Regular:pixelsize=11;2"
+font-1 = "MesloLGS NF:style=Bold:pixelsize=11;2"
+
+# --- THE LAYOUT ---
+# Date is now centered, IP modules are gone
+modules-left = powermenu xworkspaces xwindow
+modules-right = xkeyboard filesystem memory cpu wlan eth pulseaudio my-volume battery date
+
+cursor-click = pointery
+enable-ipc = true
+
+# --- Tray Settings ---
+tray-position = none
+tray-padding = 1
+tray-maxsize = 10
+tray-background = ${colors.background}
+tray-offset-x = 0
+tray-offset-y = 0
+
+[module/systray]
+type = internal/tray
+format-margin = 4pt
+tray-spacing = 8pt
+
+
+[module/xworkspaces]
+type = internal/xworkspaces
+label-active = %name%
+label-active-background = ${colors.background-alt}
+label-active-underline= ${colors.primary}
+label-active-padding = 1
+
+label-occupied = %name%
+label-occupied-padding = 1
+label-occupied-foreground = ${colors.primary}
+
+label-empty = %name%
+label-empty-foreground = ${colors.disabled}
+label-empty-padding = 1
+
+[module/xwindow]
+type = internal/xwindow
+label = %title:0:40:...%
+label-foreground = ${colors.secondary}
+
+[module/filesystem]
+type = internal/fs
+interval = 25
+
+mount-0 = /
+
+# Wrap the text in the Alacritty command with our hidden title!
+format-mounted = %{A1:alacritty --class yazi_fm -e yazi &:}󰋊 <label-mounted>%{A}
+format-mounted-foreground = ${colors.primary}
+
+# The actual text showing the percentage or free space
+label-mounted = %percentage_used%%
+label-mounted-foreground = ${colors.foreground}
+
+format-unmounted = <label-unmounted>
+label-unmounted = %mountpoint% not mounted
+label-unmounted-foreground = ${colors.disabled}
+
+[module0/pulseaudio]
+type = internal/pulseaudio
+
+# This allows you to scroll anywhere on the volume text/icon
+format-volume = <ramp-volume> <label-volume>
+label-volume = %percentage%%
+label-volume-foreground = ${colors.foreground}
+
+# Icon changes as you scroll
+ramp-volume-0 = "󰕿 "
+ramp-volume-1 = "󰖀 "
+ramp-volume-2 = "󰕾 "
+ramp-volume-foreground = ${colors.primary}
+
+# Muted state
+label-muted = "󰝟 Muted"
+label-muted-foreground = ${colors.disabled}
+
+# --- Mouse Actions ---
+# Left click: Toggle Mute
+click-left = pactl set-sink-mute @DEFAULT_SINK@ toggle
+# Right click: Open the beautiful Rofi Audio Menu!
+click-right = /home/i3-pj/dotfiles/rofi/.config/rofi/scripts/rofi-audio-menu.sh
+# Scroll: Already handled by internal/pulseaudio!
+# (If scrolling feels backwards, add: reverse-scroll = true)
+
+[module/my-volume]
+type = custom/script
+# This script reads the volume, checks if it's muted, and prints the correct icon
+exec = "vol=$(pactl get-sink-volume @DEFAULT_SINK@ | grep -Po '\\d+(?=%)' | head -n 1); mute=$(pactl get-sink-mute @DEFAULT_SINK@); if [[ $mute == *'yes'* ]]; then echo '󰝟'; elif [ $vol -lt 50 ]; then echo '󰖀'; else echo '󰕾'; fi"
+interval = 1
+
+# Formatting
+format = <label>
+label-foreground = #8be9fd
+
+# --- The Magic Mouse Binds ---
+# Left-Click: Open our volume mixer
+click-left = pavucontrol &
+
+# Right-Click: Toggle Mute (what left-click used to do)
+click-right = pactl set-sink-mute @DEFAULT_SINK@ toggle
+
+# Scroll Wheel: Smoothly turn volume up and down
+scroll-up = pactl set-sink-volume @DEFAULT_SINK@ +5%
+scroll-down = pactl set-sink-volume @DEFAULT_SINK@ -5%
+
+
+[module/pulseaudio]
+type = internal/pulseaudio
+
+# --- Volume State ---
+# We removed <label-volume> so ONLY the icon shows!
+format-volume = <ramp-volume>
+
+# The beautiful Material Design volume icons
+ramp-volume-0 = "󰕿"
+ramp-volume-1 = "󰖀"
+ramp-volume-2 = "󰕾"
+ramp-volume-foreground = #8be9fd
+
+# --- Muted State ---
+format-muted = <label-muted>
+label-muted = "󰝟"
+label-muted-foreground = #fc4a4a
+
+# --- The "Volume Bar" Action ---
+# Since left-click is hardcoded to mute, we use right-click to open the mixer GUI
+click-right = pavucontrol
+
+
+
+[module/xkeyboard]
+type = internal/xkeyboard
+
+# Ignore internal CapsLock/NumLock indicators, we just want the language
+blacklist-0 = num lock
+blacklist-1 = scroll lock
+
+# Format it with a keyboard icon and wrap it in our Rofi click action!
+format = %{A1:/home/i3-pj/dotfiles/rofi/.config/rofi/scripts/rofi-keyboard.sh:}  <label-layout>%{A} 
+format-foreground = ${colors.primary}
+
+label-layout = %layout%
+label-layout-foreground = ${colors.foreground}
+
+[module/memory]
+type = internal/memory
+interval = 2
+format-prefix = "󰍛"
+format-prefix-foreground = ${colors.primary}
+
+# Added the percentage in brackets, and wrapped it in a click action
+format = %{A1:alacritty -T sysmon -e btop &:} <label> %{A}
+
+# The RAM readout (Used / Total)
+label = %gb_used% / %gb_total%
+
+[module/cpu]
+type = internal/cpu
+interval = 2
+#format-prefix = "󰻠 "
+format-prefix-foreground = ${colors.primary}
+
+# We include BOTH the text label and the ramp graph
+format = %{A1:alacritty -T sysmon -e btop &:}<ramp-load> <label> %{A}
+
+# The clickable percentage (opens btop!)
+label = %{A1:alacritty -T sysmon -e btop &:}%percentage:2%%%{A}
+
+# The dynamic CPU load bar graph
+# 0% is now an underscore so the module never looks empty
+ramp-load-0 = _
+ramp-load-1 = ▂
+ramp-load-2 = ▃
+ramp-load-3 = ▄
+ramp-load-4 = ▅
+ramp-load-5 = ▆
+ramp-load-6 = ▇
+ramp-load-7 = █
+ramp-load-foreground = ${colors.primary}
+
+
+[module/date]
+type = internal/date
+interval = 1
+date-alt = %H:%M
+date = %A %B %d, %H:%M
+# Minty Green Text for the center clock
+label = "%date% "
+label-foreground = ${colors.foreground}
+label-font = 1
+
+[module/wlan]
+type = internal/network
+interface-type = wireless
+interval = 3.0
+
+# Wrap the connected output in a Left-Click (A1) action tag
+format-connected = %{A1:/home/i3-pj/dotfiles/rofi/.config/rofi/scripts/rofi-wifi-menu.sh:}<ramp-signal> <label-connected>%{A}
+format-connected-foreground = ${colors.primary}
+label-connected = %essid% %local_ip%
+label-connected-foreground = ${colors.foreground}
+
+# Wrap the disconnected output too!
+format-disconnected = %{A1:/home/i3-pj/dotfiles/rofi/.config/rofi/scripts/rofi-wifi-menu.sh:}󰤮 Disconnected%{A}
+format-disconnected-foreground = ${colors.alert}
+
+# The dynamic signal strength icons
+ramp-signal-0 = 󰤯
+ramp-signal-1 = 󰤟
+ramp-signal-2 = 󰤢
+ramp-signal-3 = 󰤥
+ramp-signal-4 = 󰤨
+
+[module/eth]
+type = internal/network
+interface-type = wired
+interval = 3.0
+
+# Wrap the ethernet output (Icon + IP Address) in the action tag
+format-connected = %{A1:/home/i3-pj/dotfiles/rofi/.config/rofi/scripts/rofi-wifi-menu.sh:}󰈀 <label-connected>%{A}
+format-connected-foreground = ${colors.primary}
+label-connected = %local_ip%
+label-connected-foreground = ${colors.foreground}
+
+format-disconnected = %{A1:/home/i3-pj/dotfiles/rofi/.config/rofi/scripts/rofi-wifi-menu.sh:}󰈂 Disconnected%{A}
+format-disconnected-foreground = ${colors.alert}
+
+[module/battery]
+type = internal/battery
+full-at = 99
+low-at = 15
+battery = BAT0
+adapter = AC
+poll-interval = 5
+
+# --- Discharging (On Battery) ---
+# We use the dynamic ramp (icons + colors) here
+format-discharging = <ramp-capacity> <label-discharging>
+label-discharging = %percentage%%
+label-discharging-foreground = ${colors.foreground}
+
+# 0-15% (Red)
+ramp-capacity-0 = "󰁺"
+ramp-capacity-0-foreground = #fc4a4a
+
+# 15-40% (Orange)
+ramp-capacity-1 = "󱊡"
+ramp-capacity-1-foreground = #fba64c
+
+# 40-100% (Green)
+ramp-capacity-2 = "󱊢"
+ramp-capacity-2-foreground = #46ff34
+ramp-capacity-3 = "󱊣"
+ramp-capacity-3-foreground = #46ff34
+
+# --- Charging (Plugged In) ---
+format-charging = <ramp-capacity> 󱐌 <label-charging>
+
+label-charging = %percentage%%
+label-charging-foreground = ${colors.foreground}
+
+[module/powermenu]
+type = custom/text
+content = "󰐥"
+content-foreground = ${colors.alert}
+content-padding = 1
+click-left = ~/.config/rofi/powermenu/type-1/powermenu.sh &
+
+[settings]
+screenchange-reload = true
+pseudo-transparency = true
+
+; vim:ft=dosini

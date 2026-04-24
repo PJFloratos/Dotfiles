@@ -1,0 +1,39 @@
+[window]
+padding = { x = 8, y = 8 }
+opacity = 0.95
+blur = true
+
+[font]
+size = 11.0
+
+[font.normal]
+family = "JetBrainsMono Nerd Font"
+style = "Regular"
+
+[colors.primary]
+background = "#101213" # Near-black charcoal
+foreground = "#e3eaf2"
+
+[colors.normal]
+black   = "#101213"
+red     = "#f7768e"
+green   = "#4aa228"
+yellow  = "#e0af68"
+blue    = "#7aa2f7"
+magenta = "#bb9af7"
+cyan    = "#7dcfff"
+white   = "#e3eaf2"
+
+[colors.bright]
+black   = "#585b70" # The gray from your Tmux inactive tabs
+red     = "#ff5e5e"
+green   = "#46ff34" # The secondary green from your Polybar
+yellow  = "#f5e0a3"
+blue    = "#99b6f2"
+magenta = "#d2b1fa"
+cyan    = "#94e2f0"
+white   = "#a6adc8"
+
+[shell]
+program = "/usr/bin/tmux"
+args = ["new-session"]

@@ -1,0 +1,82 @@
+add_newline = true
+
+format = """
+[▌](fg:#4aa228)\
+$os\
+$directory\
+$git_branch\
+$git_status\
+$fill\
+$c\
+$golang\
+$nodejs\
+$python\
+$rust\
+$cmd_duration\
+$line_break\
+$character"""
+
+[fill]
+symbol = " "
+
+[line_break]
+disabled = false
+
+[os]
+disabled = false
+style = "bold fg:#4aa228"
+format = "[ 󰣭 ]($style)" 
+
+[directory]
+style = "bold fg:#a6adc8"
+format = "[$path]($style)"
+truncation_length = 3
+
+# --- Smart Language Detection ---
+[python]
+symbol = " 󰌠 "
+style = "bold fg:#f9e2af" # Soft gold
+format = "[$symbol$version ]($style)"
+
+[nodejs]
+symbol = "󰎙 "
+style = "bold fg:#f9e2af" # Soft gold
+format = "[$symbol$version ]($style)"
+
+[rust]
+symbol = " "
+style = "bold fg:#fc4a4a" # Red alert
+format = "[$symbol$version ]($style)"
+
+[c]
+symbol = " "
+style = "bold fg:#8caaee" # Ice blue
+format = "[$symbol$version ]($style)"
+
+[golang]
+symbol = " "
+style = "bold fg:#8caaee" # Ice blue
+format = "[$symbol$version ]($style)"
+
+
+# --- Git Information ---
+[git_branch]
+symbol = " "
+style = "bold fg:#cba6f7"
+format = "[$symbol $branch ]($style)"
+
+[git_status]
+style = "bold fg:#fc4a4a"
+format = "[$all_status$ahead_behind ]($style)"
+
+
+# --- Performance Tracking ---
+[cmd_duration]
+min_time = 2000 # Only shows up if a command takes longer than 2 seconds (2000ms)
+format = "[ $duration ](bold fg:#a6adc8)" # Muted silver so it doesn't distract
+
+
+# --- The Prompt Cursor ---
+[character]
+success_symbol = " [➜](bold fg:#4aa228) "
+error_symbol = " [➜](bold fg:#fc4a4a) "

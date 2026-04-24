@@ -1,0 +1,8 @@
+* {
+    background:     #1E1E2EE6; /* Dark transparent glass */
+    background-alt: #282839E6; /* Slightly lighter glass for hovered items */
+    foreground:     #FFFFFF;   /* Crisp white text */
+    selected:       #2fdf75;   /* Your bright Mint Green */
+    active:         #7aa2f7;   /* Secondary Blue */
+    urgent:         #f7768e;   /* Alert Red */
+}

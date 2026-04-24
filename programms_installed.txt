@@ -1,0 +1,213 @@
+# Purged
+light-locker 
+system-config-printer
+
+# Masked
+evolution-source-registry
+evolution-calendar-factory
+evolution-addressbook-factory
+goa-daemon
+
+# Installed
+i3
+feh
+rofi
+alacritty
+htop
+polybar
+nala
+stow
+lxappearance
+picom
+dunst
+libnotify-bin
+network-manager-gnome
+volumeicon-alsa
+cbatticon
+ffmpeg
+jq
+poppler-utils
+fd-find
+ripgrep
+fzf
+zoxide
+imagemagick
+xclip
+tmux
+ncurses-term
+git
+xclip
+scrot
+imagemagick
+pavucontrol
+playerctl
+btop
+volnoti
+
+# Further Research
+- Front camera diactivatio
+- systemd-analyze
+- systemd-analyze blame
+
+For fonts:
+# 1. Download and Unzip
+cd /tmp
+wget https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Meslo.zip
+unzip -o Meslo.zip -d meslo-temp
+# 2. Move to your Dotfiles
+mkdir -p ~/dotfiles/fonts
+mv meslo-temp/*.ttf ~/dotfiles/fonts/
+# 3. Symlink to system and refresh cache
+mkdir -p ~/.local/share/fonts
+ln -snf ~/dotfiles/fonts ~/.local/share/fonts/dotfiles-fonts
+fc-cache -fv
+# 4. Clean up
+rm -rf /tmp/Meslo.zip /tmp/meslo-temp
+
+
+For Yazi:
+wget -qO yazi.zip https://github.com/sxyazi/yazi/releases/latest/download/yazi-x86_64-unknown-linux-gnu.zip
+unzip -q yazi.zip -d yazi-temp
+sudo mv yazi-temp/*/ya yazi-temp/*/yazi /usr/local/bin/
+rm -rf yazi-temp yazi.zip
+
+
+For starship
+curl -sS https://starship.rs/install.sh | sh
+
+
+For Fastfetch
+wget https://github.com/fastfetch-cli/fastfetch/releases/latest/download/fastfetch-linux-amd64.deb
+sudo apt install ./fastfetch-linux-amd64.deb -y
+rm fastfetch-linux-amd64.deb
+
+
+For Tmux Plugin Manager
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+
+
+For rofi-wifi
+wget https://raw.githubusercontent.com/ericmurphyxyz/rofi-wifi-menu/master/rofi-wifi-menu.sh -O ~/dotfiles/rofi/.config/rofi/scripts/rofi-wifi-menu.sh
+
+
+For bat (after install):
+mkdir -p ~/.local/bin
+ln -s /usr/bin/batcat ~/.local/bin/bat
+
+# Needs to be installed
+X polyabr (status bar)
+  X picom (Polybar)
+    For transparency, shadows, and seamingless window changes.
+
+  X Dunst (Polybar)
+    For notification deamon.
+
+  X System Tray Applets (Polybar)
+    For clicable wifi, volume, and battery monitor.
+
+yazi (file manager)
+  bat (yazi)
+    A nice replacement of 'cat'. 
+
+  ffmpegthumbnailer (yazi)
+    This generates instant, high-quality thumbnails for video files in the terminal.
+  
+  chafa or ueberzugpp (yazi)
+    To see image previews inside Alacrity.
+  
+  poppler-utils (yazi)
+    Contains a tool that lets Yazi extract and preview text from PDF files.
+
+  jq (yazi)
+    Formats and colorizes JSON files so they are actually readable in the preview pane.
+  
+  xclip or xsel (yazi)
+    Yazi needs one of these clipboard managers to copy files or file paths from the terminal.
+
+  trash-cli (yazi)
+    Lets Yazi send files to your regular system "Trash/Recycle Bin".
+
+X rofi (app launcher)
+  
+X feh
+  Hyper-fast, terminal-based image viewer. It has a built-in flag to set the desktop background.
+
+X alacrity
+  Control its appearance completely through the ~/.config/alacritty/alacritty.toml
+  Alacritty cannot open tabs or split into multiple panes on its own, you need a multiplexer.
+  X tmux (alacrity)
+    It runs as the background server. It is highly configurable.
+  
+  X starship (alacrity)
+    To get those beautiful, colored, informative prompts.
+ 
+  X ttf-meslo-nerd (alacrity)
+
+X nala
+  As a prettier apt.
+
+X eza
+  As a pritter ls.
+
+autorandr
+ As a multiple monitor manager.
+
+
+
+
+# Need to be ressearched
+workspaces and multiple monitors
+binding apps into specific workspaces
+
+
+# Some shorcut
+Win+Enter        : Open Terminal
+Win+Shift+Q      : Close window
+Win+Number       : Open or go to that workspace
+Win+Arrows       : focus on specfic window
+Win+v            : create a split container (when new window is created in that container only affect that container)
+Win+Shift+Arrows : Move the current window
+Win+Shift+R      : Reload i3
+Win+'+'          : Increase the size of terminal
+
+
+# Configs (~/.config/i3/config)
+There are some config files in: https://github.com/typecraft-dev/dotfiles.git (then use stow)
+
+## Config the polybar (the config file might be under /usr/share/doc/polybar/example/config.ini)
+exec_always polybar --reload -c $HOME/.config/polybar/config.ini &
+exec_always --no-startup-id nitrogen --restore
+
+# Another config route for polybar
+exec_always --no-startup-id killal polybar
+exec_always --no-startup-id polybar
+
+# To make polybar into every single monitor
+if type "xrandr"; then
+    for m in $(xrandr --query | grep " connected" | cut -d" " -f1); do
+        MONITOR=$m polybar --reload toph &
+    done
+eles
+    polybar --reload toph &
+fi
+
+# and then replace poolybar with this sh file in the i3 config
+
+
+# Stow command for syncing up config files (by creating symlinks)
+Symlinks can be created with 'ln' and create a file that has the same id with the file we want to link
+(changes on the one file aplly to the other file. Technically there are the same file)
+
+Stow manages the creation and deletion of symlinks.
+
+Naming convensions for GNU Stow
+Dotfile                   GNU Stow                
+~/.config/nvim            nvim/.config/nvim
+~/.cinfig/alacrity        alacrity/.config/alacrity
+~/.zshrc                  zshrc/.zshrc
+
+(we need tp create in the home directory under .config a directoty with the name of the thing we want to
+configure so Stow would know what to link)
+
+(we can see the link with 'ls -lart | grep alacrity')
+

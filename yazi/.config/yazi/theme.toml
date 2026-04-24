@@ -1,0 +1,18 @@
+[manager]
+# Subtle vertical lines matching your unfocused window borders
+border_symbol = "│"
+border_style  = { fg = "#313244" }
+
+# Hovered item: Slate background with Mint text (Professional & Readable)
+hovered         = { fg = "#4aa228", bg = "#313244", bold = true }
+preview_hovered = { underline = true, fg = "#4aa228" }
+
+# Folder colors: Muted Blue-Grey to keep it calm
+folder_offset = [ 1, 0, 1, 0 ]
+folder_style  = { fg = "#585b70", bold = true }
+
+# Status bar colors
+[status]
+separator_open  = ""
+separator_close = ""
+separator_style = { fg = "#313244", bg = "#313244" }
